@@ -7,6 +7,9 @@ from random import randint
 from threading import *		
 import time		
 
+paiContador = 0
+maeContador = 0
+tioContador = 0 
 
 class Geladeira:
     def __init__(self):
@@ -28,13 +31,22 @@ class Geladeira:
         else:
             print('ENCHEU ENCHEU ENCHEU, TA BOM TA BOM, PARA PARA')
 
+class Pessoa:
+    def __init__(self):
+        self.comprou = 0
+    
+    def comprar(qntd):
+        self.comprou += qntd 
+
+
 gelada = Geladeira()
-geladaObj = Semaphore(4)
+geladaObj = Semaphore()
 print(gelada)
 
 def mainBeberLeite():
-    dormirPor = randint(1,3)
-    while gelada.qntdLeite > 0:
+    dormirPor = randint(1,10)
+    gelada.beberLeite()
+    for i in range (10):
         time.sleep(dormirPor)
         gelada.beberLeite()
         print('bebendo 1 litrinho...')
@@ -46,15 +58,13 @@ def monitora(familiar):
     print(gelada.emFalta)
     print(gelada.qntdLeite)
     print('aqui')
-    while True:
+    for i in range (10):
+        print(f'em {i}, a geladeira tem: {gelada.qntdLeite} litros de leite')
         if gelada.qntdLeite < 10:
+            print(f'{familiar} esta comprando mais!')
             gelada.adicionaLeite()
-            print(gelada.qntdLeite)
-            print(familiar)
-            geladaObj.release()
-        else:
-            print('ta de boas')
-        geladaObj.release()	
+        geladaObj.release()
+
 
 bebendoLeite = Thread(target = mainBeberLeite)
 pai = Thread(target = monitora , args = ('papai',))
